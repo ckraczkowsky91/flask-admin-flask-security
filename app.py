@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import SQLALchemyUserDatastore
+from flask_security import Security, SQLAlchemyUserDatastore
 
 # Instantiate the Flask application with configurations
 secureApp = Flask(__name__)
