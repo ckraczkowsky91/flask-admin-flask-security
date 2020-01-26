@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, login_required, UserMixin
 
@@ -14,26 +15,26 @@ db = SQLAlchemy(secureApp)
 
 # Create a table of users and user roles
 roles_users_table = db.Table('roles_users',
-                            db.Column('people_id', db.Integer(), db.ForeignKey('people.id')),
-                            db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+                            db.Column('users_id', db.Integer(), db.ForeignKey('users.id')),
+                            db.Column('roles_id', db.Integer(), db.ForeignKey('roles.id')))
 
 # Define models for the users and user roles
-class Role(db.Model):
+class Roles(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
-class People(db.Model, UserMixin):
+class Users(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(80))
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime())
 
-    roles = db.relationship('Role', secondary=roles_users_table)
+    roles = db.relationship('Roles', secondary=roles_users_table, backref='user', lazy=True)
 
 # Create a datastore and instantiate Flask-Security
-user_datastore = SQLAlchemyUserDatastore(db, People, Role)
+user_datastore = SQLAlchemyUserDatastore(db, Users, Roles)
 security = Security(secureApp, user_datastore)
 
 # Create the tables for the users and roles and add a user to the user table
@@ -41,10 +42,16 @@ security = Security(secureApp, user_datastore)
 #  i.e. calling localhost:5000 from the browser
 @secureApp.before_first_request
 def create_user():
-    # db.drop_all()
     db.create_all()
     user_datastore.create_user(email='admin', password='admin')
     db.session.commit()
+
+# Instantiate Flask-Admin
+admin = Admin(secureApp, name='Admin', template_mode='bootstrap3')
+
+# Create a ModelView to add to our administrative interface
+
+# Add administrative views to Flask-Admin
 
 # Define the index route
 @secureApp.route('/')
