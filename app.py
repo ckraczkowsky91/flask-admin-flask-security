@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, login_required, UserMixin
@@ -57,4 +57,4 @@ admin = Admin(secureApp, name='Admin', template_mode='bootstrap3')
 @secureApp.route('/')
 @login_required
 def index():
-    return '<h1>Hey</h1>'
+    return render_template('index.html')
