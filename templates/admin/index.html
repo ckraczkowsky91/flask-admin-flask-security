@@ -1,53 +1,33 @@
 {% extends 'admin/master.html' %}
-{% block body %}
-{{ super() }}
-<!-- <div class="container">
-    <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
-            <h1>Welcome!</h1>
-            {% if not current_user.is_authenticated %}
-            <p>You can register as a regular user, or log in as a superuser with the following credentials:
-            <ul>
-                <li>email: <b>admin</b></li>
-                <li>password: <b>admin</b></li>
-            </ul>
-            <p>
-                <a class="btn btn-primary" href="{{ url_for('security.login') }}">login</a> <a class="btn btn-default" href="{{ url_for('security.register') }}">register</a>
-            </p>
-            {% endif %}
-            <p>
-                <a class="btn btn-primary" href="/"><i class="glyphicon glyphicon-chevron-left"></i>Back</a>
-            </p>
-        </div>
-    </div>
-</div> -->
-<div class='container'>
-    <div>
-        <div>
-          <h1>Welcome!</h1>
-            {% if not current_user.is_authenticated %}
-            <h3>Please log in to continue</h3>
-            <br>
-            <p>You can log in as the default administrator with the following credentials:
-            <ul>
-                <li>Email: <b>admin</b></li>
-                <li>Password: <b>admin</b></li>
-            </ul>
-            <p>
-                <a class='btn btn-primary' href="{{ url_for('security.login') }}">login</a>
-            </p>
-            <br>
-            <p>Alternatively, you can register as a new administrator using the button below.</p>
-            <p>
-              <a class='btn btn-primary' href="{{ url_for('security.register') }}">Register</a>
-            </p>
-            {% endif %}
-            {% if current_user.is_authenticated %}
-            <h3>You have successfully logged in.</h3>
-            <p>You now have access to the Users view.</p>
-            {% endif %}
-        </div>
-    </div>
-</div>
 
+{% block body %}
+  {{ super() }}
+  <div class='container'>
+      <div>
+          <div>
+            <h1>Welcome!</h1>
+              {% if not current_user.is_authenticated %}
+              <h3>Please log in to continue</h3>
+              <br>
+              <p>You can log in as the default administrator with the following credentials:
+              <ul>
+                  <li>Email: <b>admin</b></li>
+                  <li>Password: <b>admin</b></li>
+              </ul>
+              <p>
+                  <a class='btn btn-primary' href="{{ url_for('security.login') }}">login</a>
+              </p>
+              <br>
+              <p>Alternatively, you can register as a new administrator using the button below.</p>
+              <p>
+                <a class='btn btn-primary' href="{{ url_for('security.register') }}">Register</a>
+              </p>
+              {% endif %}
+              {% if current_user.is_authenticated %}
+              <h3>You have successfully logged in.</h3>
+              <p>You now have access to the Users view.</p>
+              {% endif %}
+          </div>
+      </div>
+  </div>
 {% endblock body %}

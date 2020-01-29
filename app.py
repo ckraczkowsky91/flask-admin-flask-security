@@ -11,6 +11,7 @@ secureApp.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 secureApp.config['SECRET_KEY'] = 'secretkey'
 secureApp.config['SECURITY_PASSWORD_SALT'] = 'none'
 secureApp.config['SECURITY_REGISTERABLE'] = True
+secureApp.config['SECURITY_SEND_REGISTER_EMAIL'] = False
 secureApp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 secureApp.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/flask-admin-flask-security-db'
 
@@ -33,7 +34,6 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(80))
     active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
 
     roles = db.relationship('Roles', secondary=roles_users_table, backref='user', lazy=True)
 
@@ -64,17 +64,19 @@ class UserModelView(ModelView):
         if not self.is_accessible():
             return redirect(url_for('security.login'))
 
+    column_list = ['email', 'password']
+
 # Add administrative views to Flask-Admin
 admin.add_view(UserModelView(Users, db.session))
 
-# Define a context processor for merging Flask-Admin's template context into the Flask-Security views
+# Add the context processor
 @security.context_processor
 def security_context_processor():
     return dict(
         admin_base_template = admin.base_template,
         admin_view = admin.index_view,
-        h = admin_helpers,
-        get_url = url_for
+        get_url = url_for,
+        h = admin_helpers
     )
 
 # Define the index route
