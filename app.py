@@ -2,15 +2,23 @@ from flask import Flask, redirect, render_template, url_for
 from flask_admin import Admin
 from flask_admin import helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
+from flask_security import current_user, Security, SQLAlchemyUserDatastore, UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import current_user, Security, SQLAlchemyUserDatastore, login_required, UserMixin
 
 # Instantiate the Flask application with configurations
 secureApp = Flask(__name__)
+# Configure a specific Bootswatch theme
 secureApp.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 secureApp.config['SECRET_KEY'] = 'secretkey'
 secureApp.config['SECURITY_PASSWORD_SALT'] = 'none'
+# Configure application to route to the Flask-Admin index view upon login
+secureApp.config['SECURITY_POST_LOGIN_VIEW'] = '/admin/'
+# Configure application to route to the Flask-Admin index view upon logout
+secureApp.config['SECURITY_POST_LOGOUT_VIEW'] = '/admin/'
+# Configure application to route to the Flask-Admin index view upon registering
+secureApp.config['SECURITY_POST_REGISTER_VIEW'] = '/admin/'
 secureApp.config['SECURITY_REGISTERABLE'] = True
+# Configure application to not send an email upon registration
 secureApp.config['SECURITY_SEND_REGISTER_EMAIL'] = False
 secureApp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 secureApp.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/flask-admin-flask-security-db'
