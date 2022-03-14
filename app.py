@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, url_for
 from flask_admin import Admin
 from flask_admin import helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
-from flask_security import current_user, Security, SQLAlchemyUserDatastore, UserMixin
+from flask_security import current_user, Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin
 from flask_sqlalchemy import SQLAlchemy
 
 # Instantiate the Flask application with configurations
@@ -32,7 +32,7 @@ roles_users_table = db.Table('roles_users',
                             db.Column('roles_id', db.Integer(), db.ForeignKey('roles.id')))
 
 # Define models for the users and user roles
-class Roles(db.Model):
+class Roles(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
